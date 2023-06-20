@@ -17,6 +17,7 @@ export const ContactItem = styled.li`
   color: blue;
   justify-content: space-between;
   // padding: 2px;
+  
 
   cursor: pointer;
 
@@ -24,8 +25,10 @@ export const ContactItem = styled.li`
     background-color: #f0f0f0;
 
      button {
-        border-color: red;
-        color: red;
+        // border-color: red;
+        // color: red;
+        opacity: 1;
+        // transform: scale(1.025);
       }
     
   }
@@ -46,8 +49,11 @@ background-color: white;
 border: 1px solid gray;
 border-radius: 5px;
 cursor: pointer;
+opacity: 0.6;
+
 &:hover, &:focus {
   border-color: red;
   color: red;
+  opacity: 1;
 }
 `;
