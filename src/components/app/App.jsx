@@ -33,7 +33,6 @@ import { Box } from "./App.styled";
     }
 
     setContacts(prev => [...prev, newContact]);
-    console.log(contacts)
   }
 
     const chekName = newName => {
