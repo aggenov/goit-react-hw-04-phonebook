@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 export const Box = styled.div`
 padding: 40px;
-  width: 360px;
+  width: 440px;
 
 
 // margin: 0 auto;

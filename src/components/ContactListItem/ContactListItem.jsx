@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import {SearchList, ContactItem, Text, Button} from './ContactListItem.styled';
 
-const ContactListItem = ({renderListItem: {id, name, number}, onDeleteContact }) => {
-  // console.log({renderListItem: {id, name, number}, onDeleteContact })
+import { SearchList, ContactItem, Text, Button } from './ContactListItem.styled';
+
+export const ContactListItem = ({renderListItem: {id, name, number}, onDeleteContact }) => {
+
   return ( 
 
     <ContactItem key={id}>
@@ -17,17 +17,3 @@ const ContactListItem = ({renderListItem: {id, name, number}, onDeleteContact })
      
   );
 };
-
-
-ContactListItem.propTypes = {
-  renderListItem: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }).isRequired,
-
-  onDeleteContact: PropTypes.func.isRequired,
-};
-
-
-export default ContactListItem;

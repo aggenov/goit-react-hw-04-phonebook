@@ -1,105 +1,86 @@
-import React from "react";
+import {useState, useEffect } from "react";
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import ContactForm from "components/ContactForm/ContactForm";
-import ContactList from "components/ContactList/ContactList";
-import Filter from "components/Filter/filter";
+
+import {ContactForm} from "components/ContactForm/ContactForm";
+import {ContactList} from "components/ContactList/ContactList";
+import {Filter} from "components/Filter/filter";
 
 import { Box } from "./App.styled";  
 
 
- export class App extends React.Component {
+ export const App = () => {
 
-  state = {
-    contacts: [],
-    filter: '',
-  }
+  const [contacts, setContacts] = useState(() => {
+     return JSON.parse(localStorage.getItem('contacts')) ?? [];
+  });
 
-  addContact = ({name, number}) => {
+  const [filter, setFilter] = useState('');
+
+  const addContact = ({name, number}) => {
     const newContact = {
       name,
       number,
       id: nanoid(), 
-    }
+    } 
       
-    if (this.chekName(newContact.name) || this.chekNumber(newContact.number)) {
+    if (chekName(newContact.name) || chekNumber(newContact.number)) {
       Notify.failure(`${newContact.name} is already in contacts`, Notify.init({
         clickToClose: true,
         position: 'center-top',
       }));
-      return newContact;
+      return newContact.name;
     }
 
-    
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newContact],
-    }));
-
-    // console.log(this.state);
+    setContacts(prev => [...prev, newContact]);
+    console.log(contacts)
   }
 
-    chekName = newName => {
-      // console.log(this.state)
-      return this.state.contacts.find(({ name }) => name.toLowerCase() === newName.toLowerCase());
-    };
-    chekNumber = newNumber => {
-      // console.log(this.state)
-      return this.state.contacts.find(({ number }) => number === newNumber);
+    const chekName = newName => {
+      return contacts.find(({ name }) => name.toLowerCase() === newName.toLowerCase());
+   };
+   
+    const chekNumber = newNumber => {
+      return contacts.find(({ number }) => number === newNumber);
     };
 
-    changeFilter = event => {
-      this.setState({ filter: event.currentTarget.value });
+    const changeFilter = event => {
+      setFilter( event.currentTarget.value );
     };
   
-    deleteContact = contactId => {
-      this.setState(prevState => ({
-        contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-      }));
+    const deleteContact = contactId => {
+      setContacts(contacts.filter(contact => contact.id !== contactId));
     };
 
 
-//-----------------------------------------------------------------------------------
-    componentDidMount() {
-      const contacts = localStorage.getItem('contacts');
-      const parsedContacts = JSON.parse(contacts);
-  
-      if (parsedContacts) {
-        this.setState({ contacts: parsedContacts });
-      }
-    }
-  
-    componentDidUpdate(prevProps, prevState) {
-      if (this.state.contacts !== prevState.contacts) {
-        localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-      }
-    }
-//--------------------------------------------------------------------------------
-
-
-  render() {
-    const { contacts, filter } = this.state;    
-    const normalizedFilter = filter.toLowerCase();
+  //-----------------------------------------------------------------------------------
+    // componentDidUpdate 
+    useEffect (() => {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    },[contacts])
+  //--------------------------------------------------------------------------------
+ 
     const visibleContacts = contacts.filter(contact =>
-       contact.name.toLowerCase().includes(normalizedFilter));
+       contact.name.toLowerCase().includes(filter.toLowerCase()));
 
     return (
       <>
       <Box>             
         <h1>Phonebook</h1>
-        <ContactForm onSubmit = {this.addContact}/>
+        <ContactForm onSubmit = {addContact}/>
       </Box>
 
       <Box>  
         <h2>Contacts</h2>
-        <Filter value={filter} onChange={this.changeFilter} />
+        <Filter value={filter} onChange={changeFilter} />
         <ContactList 
         contacts={visibleContacts} 
-        onDelete={this.deleteContact} 
+        onDelete={deleteContact} 
          />        
       </Box> 
     </>
     );
-  }
+  
   
 };
 
